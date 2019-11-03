@@ -44,10 +44,12 @@ def mu_vector_s(path_lengths, s, obs, obs_ref):
     return mu_vector
 
 def cov_mat(graph, path_lengths, sorted_obs):
-    cov_matrix = [[]]
-    for ind, o1 in enumerate(sorted_obs):
+    cov_matrix = []
+    for o1 in sorted_obs:
+        temp_list = []
         for o2 in sorted_obs:
-            cov_matrix[ind].append(path_lengths[o1][o2])
+            temp_list.append(path_lengths[o1][o2])
+        cov_matrix.append(temp_list)
     return np.cov(cov_matrix)
 
 
