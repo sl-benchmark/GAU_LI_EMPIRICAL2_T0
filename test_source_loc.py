@@ -14,14 +14,15 @@ def ptva_li_empirical_cov_mean(graph, obs_time, distribution) :
     sigma = distribution.std()
     obs = np.array(list(obs_time.keys()))
 
-    #print('mu ', mu)
-    #print('sigma ', sigma)
-    #print('obs ', obs)
 
     path_lengths = {}
     paths = {}
+
+    graph = preprocess(obs, graph, distribution)
+
     for o in obs:
         path_lengths[o], paths[o] = nx.single_source_dijkstra(graph, o)
+
     ### Run the estimation
     s_est, likelihoods, d_mu, cov = se.ml_estimate(graph, obs_time, sigma, mu, paths,
         path_lengths)
@@ -30,6 +31,15 @@ def ptva_li_empirical_cov_mean(graph, obs_time, distribution) :
 
     return (s_est, ranked)
 
+def preprocess(observer, graph, distr):
+    for o in observer:
+        ### Initialization of the edge delay
+        edges = graph.edges()
+        for (u, v) in edges:
+            graph[u][v]['weight'] = graph[u][v]['weight'] + abs(distr.rvs())
 
+    for (u, v) in edges:
+        graph[u][v]['weight'] = graph[u][v]['weight'] / len(observer)
+    return graph
 
 # -----------------------------------------------------------------------------

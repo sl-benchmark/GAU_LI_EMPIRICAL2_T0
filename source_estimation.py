@@ -47,36 +47,20 @@ def ml_estimate(graph, obs_time, sigma, mu, paths, path_lengths,
     d_mu = collections.defaultdict(list)
     covariance = collections.defaultdict(list)
 
-    ### Computes classes of nodes with same position with respect to all observers
-    classes = tl.classes(path_lengths, sorted_obs)
+    ### Covariance matrix
+    cov_d_s = np.cov(path_lengths[o] for o in sorted_obs)
+    cov_d_s = (sigma**2)*cov_d_s
+    ### Mean vector
+    mu_s = np.mean(path_lengths[o] for o in sorted_obs, axis = 0)
+    mu_s = mu*mu_s
+    ### Computes log-probability of the source being the real source
+    likelihood, tmp = logLH_source_tree(mu_s, cov_d_s, sorted_obs, obs_time)
+    tmp_lkl.append(likelihood)
 
-    ### Iteration over all nodes per class
-    #   nodes from same class will be attributed the average of their likelihoods
-    #   likelihood
-    for c in classes:
-
-        tmp_lkl = [] # Used to compute mean of likelihoods of same class
-        for s in c:
-            if path_lengths[o1][s] < max_dist:
-                ### BFS tree
-                tree_s = likelihood_tree(paths, s, sorted_obs)
-                ### Covariance matrix
-                cov_d_s = tl.cov_mat(tree_s, graph, paths, sorted_obs)
-                cov_d_s = (sigma**2)*cov_d_s
-                ### Mean vector
-                mu_s = tl.mu_vector_s(paths, s, sorted_obs)
-                mu_s = mu*mu_s
-                ### Computes log-probability of the source being the real source
-                likelihood, tmp = logLH_source_tree(mu_s, cov_d_s, sorted_obs, obs_time)
-                tmp_lkl.append(likelihood)
-
-                ## Save print values
-                d_mu[s] = tmp
-                covariance[s] = cov_d_s
-        ### If the class was not empty
-        if len(tmp_lkl)>0:
-            for s in c:
-                loglikelihood[s] = np.mean(tmp_lkl)
+    ## Save print values
+    d_mu[s] = tmp
+    covariance[s] = cov_d_s
+        
 
     ### Find the nodes with maximum loglikelihood and return the nodes
     # with maximum a posteriori likelihood

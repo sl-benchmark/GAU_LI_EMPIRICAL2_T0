@@ -37,42 +37,7 @@ def verif_existant_path(edges, path):
     return all(any(p1==p2 for p1 in edges) for p2 in path_edges)
 
 
-def cov_mat(tree, graph, paths, obs):
-    """Compute the covariance matrix of the observed delays.
 
-    obs is the ordered set of observers.
-
-    """
-    if not nx.is_tree(tree):
-        #if it is not a tree, the paths are not unique...
-        raise ValueError("This function expects a tree!")
-
-    #check if the shortest paths between obs[0] and the other
-    #observers are contained in the tree
-    #and redefine them if this is not the case
-    #NB no need to use the dijkstra networkx function because in a tree the
-    #paths are unique
-    bfs_tree_paths = {}
-    undirected_tree = tree.to_undirected()
-    for o in obs[1:]:
-        if not(verif_existant_path(list(tree.edges), paths[obs[0]][o])) :
-            bfs_tree_paths[o] = nx.shortest_path(undirected_tree, obs[0], o)
-        else:
-            bfs_tree_paths[o] = paths[obs[0]][o]
-
-    k = len(obs)
-    cov = np.empty([k-1, k-1])
-    for row in range(0, k-1):
-        for col in range(0, k-1):
-            if row == col:
-                cov[row, col] = len(bfs_tree_paths[obs[col+1]])-1
-            else:
-                path_row = bfs_tree_paths[obs[row+1]]
-                path_col = bfs_tree_paths[obs[col+1]]
-                common_nodes = list(filter(lambda x: x in path_col, path_row)) # does it respect some order
-                #p = nx.shortest_path(tree, common_nodes[0],common_nodes[-1]) # how to ensure that the path includes all common nodes ?
-                cov[row, col] = len(common_nodes)-1
-    return cov
 
 # ---------------------------- Filtering diffusion data
 
