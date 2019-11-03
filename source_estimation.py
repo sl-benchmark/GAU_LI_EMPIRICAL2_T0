@@ -117,7 +117,7 @@ def logLH_source_tree(mu_s, cov_d, obs, obs_time):
     assert len(obs) > 1
 
     ### Creates the vector for the infection times with respect to the referential observer
-    obs_d = np.zeros((len(obs)-1, 1))
+    obs_d = np.zeros((len(obs), 1))
 
     ### Loops over all the observers (w/o first one (referential) and last one (computation constraint))
     #   Every time it computes the infection time with respect to the ref obs
