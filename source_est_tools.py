@@ -45,7 +45,7 @@ def mu_vector_s(path_lengths, s, obs, obs_ref):
 
 def cov_mat(graph, path_lengths, sorted_obs):
     cov_matrix = []
-    for o1 in sorted_obs:
+    for o1 in sorted_obs[1:]:
         temp_list = []
         for o2 in sorted_obs[1:]:
             temp_list.append(path_lengths[o1][o2])
