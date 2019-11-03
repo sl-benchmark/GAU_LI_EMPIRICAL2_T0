@@ -59,10 +59,8 @@ def ml_estimate(graph, obs_time, sigma, mu, paths, path_lengths,
         tmp_lkl = [] # Used to compute mean of likelihoods of same class
         for s in c:
             if path_lengths[o1][s] < max_dist:
-                ### BFS tree
-                tree_s = likelihood_tree(paths, s, sorted_obs)
                 ### Covariance matrix
-                cov_d_s = tl.cov_mat(tree_s, graph, paths, sorted_obs)
+                cov_d_s = tl.cov_mat(graph, paths, sorted_obs)
                 ### Mean vector
                 mu_s = tl.mu_vector_s(paths, s, sorted_obs)
                 ### Computes log-probability of the source being the real source
