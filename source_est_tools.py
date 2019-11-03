@@ -37,6 +37,21 @@ def verif_existant_path(edges, path):
     return all(any(p1==p2 for p1 in edges) for p2 in path_edges)
 
 
+def mu_vector_s(path_lengths, s, obs, obs_ref):
+    mu_vector = []
+    for o in obs:
+        mu_vector.append(path_lengths[o][s])
+    return mu_vector
+
+def cov_mat(graph, path_lengths, sorted_obs):
+    cov_matrix = [[]]
+    for ind, o1 in enumerate(sorted_obs):
+        for o2 in sorted_obs:
+            cov_matrix[ind].append(path_lengths[o1][o2])
+    return np.cov(cov_matrix)
+
+
+
 
 
 # ---------------------------- Filtering diffusion data

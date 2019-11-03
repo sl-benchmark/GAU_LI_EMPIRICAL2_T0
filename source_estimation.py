@@ -47,26 +47,35 @@ def ml_estimate(graph, obs_time, sigma, mu, paths, path_lengths,
     d_mu = collections.defaultdict(list)
     covariance = collections.defaultdict(list)
 
-    for o in sorted_obs:
-        print(path_lengths[o])
 
-    # make a matrix from every path_length from every observers
-    paths_lengths_tab = [list(path_lengths[o].values()) for o in sorted_obs]
+    ### Computes classes of nodes with same position with respect to all observers
+    classes = tl.classes(path_lengths, sorted_obs)
 
-    ### Covariance matrix
-    cov_d_s = np.cov(list(paths_lengths_tab.values()))
-    cov_d_s = (sigma**2)*cov_d_s
-    ### Mean vector
-    mu_s = np.mean(list(paths_lengths_tab.values()), axis = 0)
-    mu_s = mu*mu_s
-    ### Computes log-probability of the source being the real source
-    likelihood, tmp = logLH_source_tree(mu_s, cov_d_s, sorted_obs, obs_time)
-    tmp_lkl.append(likelihood)
+    ### Iteration over all nodes per class
+    #   nodes from same class will be attributed the average of their likelihoods
+    #   likelihood
+    for c in classes:
 
-    ## Save print values
-    d_mu[s] = tmp
-    covariance[s] = cov_d_s
+        tmp_lkl = [] # Used to compute mean of likelihoods of same class
+        for s in c:
+            if path_lengths[o1][s] < max_dist:
+                ### BFS tree
+                tree_s = likelihood_tree(paths, s, sorted_obs)
+                ### Covariance matrix
+                cov_d_s = tl.cov_mat(tree_s, graph, paths, sorted_obs)
+                ### Mean vector
+                mu_s = tl.mu_vector_s(paths, s, sorted_obs)
+                ### Computes log-probability of the source being the real source
+                likelihood, tmp = logLH_source_tree(mu_s, cov_d_s, sorted_obs, obs_time)
+                tmp_lkl.append(likelihood)
 
+                ## Save print values
+                d_mu[s] = tmp
+                covariance[s] = cov_d_s
+        ### If the class was not empty
+        if len(tmp_lkl)>0:
+            for s in c:
+                loglikelihood[s] = np.mean(tmp_lkl)
 
     ### Find the nodes with maximum loglikelihood and return the nodes
     # with maximum a posteriori likelihood
