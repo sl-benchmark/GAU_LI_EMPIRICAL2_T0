@@ -47,7 +47,8 @@ def ml_estimate(graph, obs_time, sigma, mu, paths, path_lengths,
     d_mu = collections.defaultdict(list)
     covariance = collections.defaultdict(list)
 
-    paths_lengths_tab = [path_lengths[o] for o in sorted_obs]
+    # make a matrix from every path_length from every observers
+    paths_lengths_tab = [list(path_lengths[o].values) for o in sorted_obs]
 
     ### Covariance matrix
     cov_d_s = np.cov(list(paths_lengths_tab.values()))
