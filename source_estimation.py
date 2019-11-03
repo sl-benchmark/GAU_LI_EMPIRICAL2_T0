@@ -62,7 +62,7 @@ def ml_estimate(graph, obs_time, sigma, mu, paths, path_lengths,
                 ### Covariance matrix
                 cov_d_s = tl.cov_mat(graph, path_lengths, sorted_obs)
                 ### Mean vector
-                mu_s = tl.mu_vector_s(path_lengths, s, sorted_obs)
+                mu_s = tl.mu_vector_s(path_lengths, s, sorted_obs, o1)
                 ### Computes log-probability of the source being the real source
                 likelihood, tmp = logLH_source_tree(mu_s, cov_d_s, sorted_obs, obs_time)
                 tmp_lkl.append(likelihood)
@@ -117,7 +117,7 @@ def logLH_source_tree(mu_s, cov_d, obs, obs_time):
     assert len(obs) > 1
 
     ### Creates the vector for the infection times with respect to the referential observer
-    obs_d = np.zeros((len(obs)-1, 1))
+    obs_d = np.zeros((len(obs), 1))
 
     ### Loops over all the observers (w/o first one (referential) and last one (computation constraint))
     #   Every time it computes the infection time with respect to the ref obs

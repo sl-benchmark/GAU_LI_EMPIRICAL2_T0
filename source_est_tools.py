@@ -37,10 +37,10 @@ def verif_existant_path(edges, path):
     return all(any(p1==p2 for p1 in edges) for p2 in path_edges)
 
 
-def mu_vector_s(path_lengths, s, obs):
+def mu_vector_s(path_lengths, s, obs, obs_ref):
     mu_vector = []
     for o in obs:
-        mu_vector.append(path_lengths[o][s])
+        mu_vector.append(path_lengths[o][s] - path_lengths[obs_ref][s])
     return mu_vector
 
 def cov_mat(graph, path_lengths, sorted_obs):
