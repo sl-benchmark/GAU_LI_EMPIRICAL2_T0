@@ -57,7 +57,7 @@ def mu_vector_s(path_lengths, s, obs):
     for l in range(1, len(obs)):
         #the shortest path are contained in the bfs tree or at least have the
         #same length by definition of bfs tree
-        v.append(path_lengths[obs[l]][s] - path_lengths[obs[0]][s])
+        v.append(path_lengths[str(obs[l])][s] - path_lengths[str(obs[0])][s])
     #Transform the list in a column array (needed for source estimation)
     mu_s = np.zeros((len(obs)-1, 1))
     mu_s[:, 0] = v
@@ -119,9 +119,9 @@ def classes(path_length, sorted_obs):
     print('.......')
     print(path_length)
     ### Loops over all nodes reachables from the first infected node
-    for neighbor in path_length[min_obs].keys():
+    for neighbor in path_length[str(min_obs)].keys():
         ## In short computes key=distance to all observers and value=node
-        tuple_index = tuple(int((10**8)*(path_length[observer][neighbor] - path_length[min_obs][neighbor])) for observer in sorted_obs[1:])
+        tuple_index = tuple(int((10**8)*(path_length[str(observer)][neighbor] - path_length[str(min_obs)][neighbor])) for observer in sorted_obs[1:])
         vector_to_n[tuple_index].append(neighbor)
 
     classes = vector_to_n.values()
