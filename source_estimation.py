@@ -64,7 +64,7 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
             print(path_lengths)
             print(path_lengths.transpose())
             ### Covariance matrix
-            cov_d_s = np.cov(path_lengths.transpose()[str(int(s))].values - mean_path_lengths[str(sorted_obs[0])][s])
+            cov_d_s = np.cov(path_lengths.transpose()[str(s)].values - mean_path_lengths[str(sorted_obs[0])][s])
             ### Mean vector
             mu_s = tl.mu_vector_s(mean_path_lengths, s, sorted_obs)
             ### Computes log-probability of the source being the real source
