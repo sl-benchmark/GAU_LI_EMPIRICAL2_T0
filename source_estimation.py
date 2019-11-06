@@ -47,8 +47,6 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
     d_mu = collections.defaultdict(list)
     covariance = collections.defaultdict(list)
 
-    # average the path lengths from all the diffusion
-    mean_path_lengths = compute_mean_shortest_path(path_lengths)
     ### Computes classes of nodes with same position with respect to all observers
     classes = tl.classes(mean_path_lengths, sorted_obs)
 
