@@ -43,7 +43,7 @@ PARAMETERS:
 RETURN: dictionnary of dictionnary: {obs: {node: mean length}}
 '''
 def compute_mean_shortest_path(path_lengths):
-    path_lengths.reset_index(inplace = True)
+    path_lengths = path_lengths.reset_index()
     path_lengths = path_lengths.rename({'index': 'node'}, axis = 1).set_index('node')
     return path_lengths.groupby(['node']).mean().to_dict()
 
