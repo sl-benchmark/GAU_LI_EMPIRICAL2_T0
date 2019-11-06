@@ -130,15 +130,3 @@ def logLH_source_tree(mu_s, cov_d, obs, obs_time):
     denom = math.sqrt(((2*math.pi)**(len(obs_d)-1))*np.linalg.det(cov_d))
 
     return (exponent - np.log(denom))[0,0], obs_d - mu_s
-
-
-def likelihood_tree(paths, s, obs):
-    """Creates a BFS tree with only observers at its leaves.
-
-    Returns a BFS tree
-    """
-    tree = nx.Graph()
-    for o in obs:
-        p = paths[o][s]
-        tree.add_edges_from(zip(p[0:-1], p[1:]))
-    return tree

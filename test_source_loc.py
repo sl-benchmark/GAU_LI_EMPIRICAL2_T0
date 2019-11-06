@@ -15,6 +15,7 @@ def ptva_li_empirical(graph, obs_time, distribution) :
     obs = np.array(list(obs_time.keys()))
 
     path_lengths = preprocess(obs, graph, distribution, nb_diffusions)
+    print('PATH LENGTH ', path_lengths)
 
     ### Run the estimation
     s_est, likelihoods, d_mu, cov = se.ml_estimate(graph, obs_time, path_lengths)
