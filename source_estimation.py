@@ -60,6 +60,8 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
 
         tmp_lkl = [] # Used to compute mean of likelihoods of same class
         for s in c:
+            print('""""""""""')
+            print(path_lengths.transpose())
             ### Covariance matrix
             cov_d_s = np.cov(path_lengths.transpose()[str(s)].values - mean_path_lengths[str(sorted_obs[0])][s])
             ### Mean vector
