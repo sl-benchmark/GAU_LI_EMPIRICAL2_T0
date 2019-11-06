@@ -36,22 +36,33 @@ def verif_existant_path(edges, path):
     path_edges = zip(path[:-1], path[1:])
     return all(any(p1==p2 for p1 in edges) for p2 in path_edges)
 
+'''
+Compute the mean shortest path of every diffusion
+PARAMETERS:
+    path_lengths:(pandas.DataFrame) containing all shortest path from every diffusion
+RETURN: dictionnary of dictionnary: {obs: {node: mean length}}
+'''
+def compute_mean_shortest_path(path_lengths):
+    path_lengths.reset_index(inplace = True)
+    path_lengths = path_lengths.rename({'index': 'node'}, axis = 1).set_index('node')
+    return path_lengths.groupby(['node']).mean().to_dict()
 
-def mu_vector_s(path_lengths, s, obs, obs_ref):
-    mu_vector = []
-    for o in obs:
-        mu_vector.append(path_lengths[o][s] - path_lengths[obs_ref][s])
-    return mu_vector
 
-def cov_mat(graph, path_lengths, sorted_obs):
-    cov_matrix = []
-    for o1 in sorted_obs:
-        temp_list = []
-        for o2 in sorted_obs:
-            temp_list.append(path_lengths[o1][o2])
-        cov_matrix.append(temp_list)
-    print('COV ', np.cov(cov_matrix))
-    return np.cov(cov_matrix)
+def mu_vector_s(path_lengths, s, obs):
+    """compute the mu vector for a candidate s
+
+       obs is the ordered list of observers
+    """
+    v = list()
+    for l in range(1, len(obs)):
+        #the shortest path are contained in the bfs tree or at least have the
+        #same length by definition of bfs tree
+        v.append(path_lengths[obs[l]][s] - path_lengths[obs[0]][s])
+    #Transform the list in a column array (needed for source estimation)
+    mu_s = np.zeros((len(obs)-1, 1))
+    mu_s[:, 0] = v
+    return mu_s
+
 
 
 

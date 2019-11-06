@@ -20,8 +20,8 @@ import collections
 import scipy.stats as st
 from scipy.misc import logsumexp
 
-def ml_estimate(graph, obs_time, sigma, mu, paths, path_lengths,
-        max_dist=np.inf):
+def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
+
     """Returns estimated source from graph and partial observation of the
     process.
 
@@ -47,9 +47,10 @@ def ml_estimate(graph, obs_time, sigma, mu, paths, path_lengths,
     d_mu = collections.defaultdict(list)
     covariance = collections.defaultdict(list)
 
-
+    # average the path lengths from all the diffusion
+    mean_path_lengths = compute_mean_shortest_path(path_lengths)
     ### Computes classes of nodes with same position with respect to all observers
-    classes = tl.classes(path_lengths, sorted_obs)
+    classes = tl.classes(mean_path_lengths, sorted_obs)
 
     ### Iteration over all nodes per class
     #   nodes from same class will be attributed the average of their likelihoods
@@ -58,18 +59,17 @@ def ml_estimate(graph, obs_time, sigma, mu, paths, path_lengths,
 
         tmp_lkl = [] # Used to compute mean of likelihoods of same class
         for s in c:
-            if path_lengths[o1][s] < max_dist:
-                ### Covariance matrix
-                cov_d_s = tl.cov_mat(graph, path_lengths, sorted_obs)
-                ### Mean vector
-                mu_s = tl.mu_vector_s(path_lengths, s, sorted_obs, o1)
-                ### Computes log-probability of the source being the real source
-                likelihood, tmp = logLH_source_tree(mu_s, cov_d_s, sorted_obs, obs_time)
-                tmp_lkl.append(likelihood)
+            ### Covariance matrix
+            cov_d_s = np.cov(path_lengths.transpose()[str(s)] - mean_path_lengths[sorted_obs[0]][s])
+            ### Mean vector
+            mu_s = tl.mu_vector_s(mean_path_lengths, s, sorted_obs)
+            ### Computes log-probability of the source being the real source
+            likelihood, tmp = logLH_source_tree(mu_s, cov_d_s, sorted_obs, obs_time)
+            tmp_lkl.append(likelihood)
 
-                ## Save print values
-                d_mu[s] = tmp
-                covariance[s] = cov_d_s
+            ## Save print values
+            d_mu[s] = tmp
+            covariance[s] = cov_d_s
         ### If the class was not empty
         if len(tmp_lkl)>0:
             for s in c:
