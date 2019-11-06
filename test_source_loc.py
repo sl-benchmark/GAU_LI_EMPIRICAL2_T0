@@ -10,9 +10,10 @@ import PTVA_LI_EMPIRICAL.source_estimation as se
 
 
 def ptva_li_empirical(graph, obs_time, distribution) :
+    nb_diffusions = int(np.sqrt(len(list(graph.nodes()))))
     obs = np.array(list(obs_time.keys()))
 
-    path_lengths = preprocess(obs, graph, distribution)
+    path_lengths = preprocess(obs, graph, distribution, nb_diffusions)
 
     ### Run the estimation
     s_est, likelihoods, d_mu, cov = se.ml_estimate(graph, obs_time, path_lengths)
