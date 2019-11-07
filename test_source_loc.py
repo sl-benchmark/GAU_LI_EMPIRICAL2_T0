@@ -36,7 +36,7 @@ def preprocess(observer, graph, distr, nb_diffusions):
             graph_copy[u][v]['weight'] = abs(distr.rvs())
         for o in observer:
             ### Computation of the shortest paths from every observer to all other nodes
-            path_lengths_temp[str(o)] = pd.Series(nx.single_source_dijkstra_path_length(graph_copy, o[0]))
+            path_lengths_temp[str(o)] = pd.Series(nx.single_source_dijkstra_path_length(graph_copy, o))
         path_lengths = path_lengths.append(path_lengths_temp)
         path_lengths.reset_index(inplace = True)
         path_lengths = path_lengths.rename({'index': 'node'}, axis = 1).set_index('node')
