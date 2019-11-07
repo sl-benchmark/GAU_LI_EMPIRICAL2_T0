@@ -66,6 +66,9 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
             print(path_lengths)
             print(path_lengths.transpose())
             ### Covariance matrix
+            print('S ', s)
+            print('hahahahha')
+            print(path_lengths.transpose().reset_index())
             cov_d_s = np.cov(path_lengths.transpose().reset_index()[str(s)].to_numpy() - mean_path_lengths[str(sorted_obs[0])][s])
             ### Mean vector
             mu_s = tl.mu_vector_s(mean_path_lengths, s, sorted_obs)
