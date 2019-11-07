@@ -14,10 +14,8 @@ def ptva_li_empirical(graph, obs_time, distribution) :
     nb_diffusions = int(np.sqrt(len(list(graph.nodes()))))
     ### Gets the sorted observers and the referential observer (closest one)
     sorted_obs = sorted(obs_time.items(), key=operator.itemgetter(1))
-    print('sorted obs ', sorted_obs)
-    obs = np.array(list(sorted_obs.keys())).sort()
     print('obs ', obs)
-    path_lengths = preprocess(obs, graph, distribution, nb_diffusions)
+    path_lengths = preprocess(sorted_obs, graph, distribution, nb_diffusions)
     print(path_lengths)
 
     ### Run the estimation
@@ -38,7 +36,7 @@ def preprocess(observer, graph, distr, nb_diffusions):
             graph_copy[u][v]['weight'] = abs(distr.rvs())
         for o in observer:
             ### Computation of the shortest paths from every observer to all other nodes
-            path_lengths_temp[str(o)] = pd.Series(nx.single_source_dijkstra_path_length(graph_copy, o))
+            path_lengths_temp[str(o)] = pd.Series(nx.single_source_dijkstra_path_length(graph_copy, o[0]))
         path_lengths = path_lengths.append(path_lengths_temp)
         path_lengths.reset_index(inplace = True)
         path_lengths = path_lengths.rename({'index': 'node'}, axis = 1).set_index('node')
