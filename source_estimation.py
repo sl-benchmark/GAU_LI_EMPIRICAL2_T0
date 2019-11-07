@@ -70,7 +70,7 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
             print('hahahahha')
             cov_d_s = np.cov(path_lengths.transpose().drop([str(sorted_obs[0])]).reset_index()[s].to_numpy() - mean_path_lengths[str(sorted_obs[0])][s])
             print(path_lengths.transpose().reset_index()[s])
-            print(path_lengths.transpose().reset_index()[s].to_numpy() - mean_path_lengths[str(sorted_obs[0])][s])
+            print(path_lengths.transpose().reset_index()[s].to_numpy())
             print('SHAPE ', cov_d_s.shape)
             ### Mean vector
             mu_s = tl.mu_vector_s(mean_path_lengths, s, sorted_obs)
