@@ -14,6 +14,7 @@ def ptva_li_empirical(graph, obs_time, distribution) :
     nb_diffusions = int(np.sqrt(len(list(graph.nodes()))))
     ### Gets the sorted observers and the referential observer (closest one)
     sorted_obs = sorted(obs_time.items(), key=operator.itemgetter(1))
+    sorted_obs = [x[0] for x in sorted_obs]
     path_lengths = preprocess(sorted_obs, graph, distribution, nb_diffusions)
     print(path_lengths)
 
