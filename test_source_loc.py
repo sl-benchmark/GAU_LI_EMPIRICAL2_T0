@@ -12,7 +12,9 @@ import PTVA_LI_EMPIRICAL.source_estimation as se
 
 def ptva_li_empirical(graph, obs_time, distribution) :
     nb_diffusions = int(np.sqrt(len(list(graph.nodes()))))
-    obs = np.array(list(obs_time.keys()))
+    ### Gets the sorted observers and the referential observer (closest one)
+    sorted_obs = sorted(obs_time.items(), key=operator.itemgetter(1))
+    obs = np.array(list(sorted_obs.keys())).sort()
     print('obs ', obs)
     path_lengths = preprocess(obs, graph, distribution, nb_diffusions)
     print(path_lengths)

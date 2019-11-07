@@ -68,6 +68,7 @@ def mu_vector_s(path_lengths, s, obs):
 
 
 
+
 # ---------------------------- Filtering diffusion data
 
 def filter_diffusion_data(infected, obs, max_obs=np.inf):
