@@ -92,8 +92,11 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
     ### Find the nodes with maximum loglikelihood and return the nodes
     # with maximum a posteriori likelihood
 
+    print('posterior')
+
     ### Corrects a bias
     posterior = posterior_from_logLH(loglikelihood)
+    print(posterior)
 
     max_lkl = max(posterior.values())
     source_candidates = list()
