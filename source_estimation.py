@@ -52,7 +52,7 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
     # average the path lengths from all the diffusion
     mean_path_lengths = tl.compute_mean_shortest_path(path_lengths)
     ### Computes classes of nodes with same position with respect to all observers
-    print('sorted_obs ', sorted_obs)
+    #print('sorted_obs ', sorted_obs)
     classes = tl.classes(mean_path_lengths, sorted_obs)
 
     ### Iteration over all nodes per class
@@ -62,21 +62,21 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
 
         tmp_lkl = [] # Used to compute mean of likelihoods of same class
         for s in c:
-            print('""""""""""')
-            print(path_lengths)
-            print(path_lengths.transpose())
+            #print('""""""""""')
+            #print(path_lengths)
+            #print(path_lengths.transpose())
             ### Covariance matrix
-            print('S ', s)
-            print('hahahahha')
+            #print('S ', s)
+            #print('hahahahha')
             cov_d_s = np.cov(path_lengths.transpose().drop([str(sorted_obs[0])]).reset_index()[s].to_numpy() - mean_path_lengths[str(sorted_obs[0])][s])
-            print(path_lengths.transpose().reset_index()[s])
-            print(path_lengths.transpose().reset_index()[s].to_numpy())
-            print('SHAPE ', cov_d_s.shape)
+            #print(path_lengths.transpose().reset_index()[s])
+            #print(path_lengths.transpose().reset_index()[s].to_numpy())
+            #print('SHAPE ', cov_d_s.shape)
             ### Mean vector
             mu_s = tl.mu_vector_s(mean_path_lengths, s, sorted_obs)
-            print('MU_S ')
-            print(mu_s)
-            print('SHAPE mean', mu_s.shape)
+            #print('MU_S ')
+            #print(mu_s)
+            #print('SHAPE mean', mu_s.shape)
             ### Computes log-probability of the source being the real source
             likelihood, tmp = logLH_source_tree(mu_s, cov_d_s, sorted_obs, obs_time)
             tmp_lkl.append(likelihood)
@@ -92,11 +92,11 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
     ### Find the nodes with maximum loglikelihood and return the nodes
     # with maximum a posteriori likelihood
 
-    print('posterior')
+    #print('posterior')
 
     ### Corrects a bias
     posterior = posterior_from_logLH(loglikelihood)
-    print(posterior)
+    #print(posterior)
 
     max_lkl = max(posterior.values())
     source_candidates = list()
