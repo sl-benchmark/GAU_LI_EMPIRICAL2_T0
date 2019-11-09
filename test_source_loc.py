@@ -21,6 +21,7 @@ def ptva_li_empirical(graph, obs_time, distribution) :
     s_est, likelihoods, d_mu, cov = se.ml_estimate(graph, obs_time, path_lengths)
 
     ranked = sorted(likelihoods.items(), key=operator.itemgetter(1), reverse=True)
+    print('s_est ', s_est)
 
     return (s_est, ranked)
 
