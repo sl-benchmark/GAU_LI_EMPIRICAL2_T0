@@ -11,21 +11,6 @@ import operator
 # ---------------------------- MU VECTORS and COV MATRIX
 
 
-def mu_vector_s(paths, s, obs):
-    """compute the mu vector for a candidate s
-
-       obs is the ordered list of observers
-    """
-    v = list()
-    for l in range(1, len(obs)):
-        #the shortest path are contained in the bfs tree or at least have the
-        #same length by definition of bfs tree
-        v.append(len(paths[obs[l]][s]) - len(paths[obs[0]][s]))
-    #Transform the list in a column array (needed for source estimation)
-    mu_s = np.zeros((len(obs)-1, 1))
-    mu_s[:, 0] = v
-    return mu_s
-
 def verif_existant_path(edges, path):
     """Verifies if the existing path exists in the list of edges.
 
