@@ -81,6 +81,8 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
             #print('SHAPE mean', mu_s.shape)
             ### Computes log-probability of the source being the real source
             likelihood, tmp = logLH_source_tree(mu_s, cov_d_s, sorted_obs, obs_time)
+            print('likelihood ', likelihood)
+            print('tmp ', tmp)
             tmp_lkl.append(likelihood)
 
             ## Save print values
