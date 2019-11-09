@@ -74,6 +74,7 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
             print(mean_path_lengths[str(sorted_obs[0])][s])
             print(path_lengths.transpose().drop([str(sorted_obs[0])]).reset_index()[s].to_numpy() - mean_path_lengths[str(sorted_obs[0])][s])
             cov_d_s = np.cov(path_lengths.transpose().drop([str(sorted_obs[0])]).reset_index()[s].to_numpy() - mean_path_lengths[str(sorted_obs[0])][s])
+            print(cov_d_s)
             #print(path_lengths.transpose().reset_index()[s])
             #print(path_lengths.transpose().reset_index()[s].to_numpy())
             #print('SHAPE ', cov_d_s.shape)
