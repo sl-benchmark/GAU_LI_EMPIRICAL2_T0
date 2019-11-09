@@ -15,15 +15,13 @@ def ptva_li_empirical(graph, obs_time, distribution) :
     ### Gets the sorted observers and the referential observer (closest one)
     sorted_obs = sorted(obs_time.items(), key=operator.itemgetter(1))
     sorted_obs = [x[0] for x in sorted_obs]
-    print('sorted obs ', sorted_obs)
     path_lengths = preprocess(sorted_obs, graph, distribution, nb_diffusions)
     print(path_lengths)
-
     ### Run the estimation
     s_est, likelihoods, d_mu, cov = se.ml_estimate(graph, obs_time, path_lengths)
+    print('s_est ', s_est)
 
     ranked = sorted(likelihoods.items(), key=operator.itemgetter(1), reverse=True)
-    print('s_est ', s_est)
 
     return (s_est, ranked)
 
