@@ -73,7 +73,7 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
         if np.isclose(value, max_lkl, atol= 1e-08):
             source_candidates.append(src)
 
-    return source_candidates, posterior, d_mu, covariance
+    return source_candidates, posterior
 
 #################################################### Helper methods for ml algo
 def posterior_from_logLH(loglikelihood):
