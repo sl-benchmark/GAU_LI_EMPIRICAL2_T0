@@ -50,8 +50,12 @@ def mu_vector_s(path_lengths, s, obs):
     return mu_s
 
 
+def cov_matrix(path_lengths, sorted_obs, s):
+    ref_obs = sorted_obs[0]
+    ref_time = path_lengths[str(ref_obs)].loc[s]
+    ref_time = np.tile(ref_time, (len(sorted_obs -1, 1)))
 
-
+    cov_d_s = np.cov(path_lengths.transpose().drop([str(ref_obs)]).reset_index()[s].to_numpy() - ref_time, ddof = 0)
 
 
 
