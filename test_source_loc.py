@@ -28,7 +28,7 @@ def ptva_li_empirical(graph, obs_time, distribution) :
 def preprocess(observers, graph, distr, nb_diffusions):
     graph_copy = graph.copy()
     path_lengths = pd.DataFrame()
-    for diff in range(len(observers)):
+    for diff in range(len(observers) + 1):
         path_lengths_temp = pd.DataFrame()
         ### edge delay
         edges = graph_copy.edges()
