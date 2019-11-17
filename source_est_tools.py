@@ -103,8 +103,6 @@ def classes(path_length, sorted_obs):
     min_obs = sorted_obs[0]
     vector_to_n = collections.defaultdict(list) # creates dictionnary that will create an empty list when a non existent key is accessed
 
-    print('.......')
-    print(path_length)
     ### Loops over all nodes reachables from the first infected node
     for neighbor in path_length[str(min_obs)].keys():
         ## In short computes key=distance to all observers and value=node

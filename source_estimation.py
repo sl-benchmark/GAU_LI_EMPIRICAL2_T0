@@ -69,13 +69,13 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
             ### Covariance matrix
             #print('S ', s)
             #print('hahahahha')
-            print('cov')
-            print(path_lengths.transpose().drop([str(sorted_obs[0])]).reset_index()[s])
-            print(path_lengths.transpose().drop([str(sorted_obs[0])]).reset_index()[s].to_numpy())
-            print(mean_path_lengths[str(sorted_obs[0])][s])
-            print(path_lengths.transpose().drop([str(sorted_obs[0])]).reset_index()[s].to_numpy() - mean_path_lengths[str(sorted_obs[0])][s])
+            #print('cov')
+            #print(path_lengths.transpose().drop([str(sorted_obs[0])]).reset_index()[s])
+            #print(path_lengths.transpose().drop([str(sorted_obs[0])]).reset_index()[s].to_numpy())
+            #print(mean_path_lengths[str(sorted_obs[0])][s])
+            #print(path_lengths.transpose().drop([str(sorted_obs[0])]).reset_index()[s].to_numpy() - mean_path_lengths[str(sorted_obs[0])][s])
             cov_d_s = np.cov(path_lengths.transpose().drop([str(sorted_obs[0])]).reset_index()[s].to_numpy() - mean_path_lengths[str(sorted_obs[0])][s], ddof = 0)
-            print(cov_d_s)
+            #print(cov_d_s)
             #print(path_lengths.transpose().reset_index()[s])
             #print(path_lengths.transpose().reset_index()[s].to_numpy())
             #print('SHAPE ', cov_d_s.shape)
@@ -87,7 +87,7 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
             ### Computes log-probability of the source being the real source
             likelihood, tmp = logLH_source_tree(mu_s, cov_d_s, sorted_obs, obs_time)
             print('likelihood ', likelihood)
-            print('tmp ', tmp)
+            #print('tmp ', tmp)
             tmp_lkl.append(likelihood)
 
             ## Save print values
