@@ -40,72 +40,31 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
     sorted_obs = sorted(obs_time.items(), key=operator.itemgetter(1))
     sorted_obs = [x[0] for x in sorted_obs]
     o1 = min(obs_time, key=obs_time.get)
-    print('o1 ', o1)
 
     ### Gets the nodes of the graph and initializes likelihood
     nodes = np.array(list(graph.nodes))
     loglikelihood = {n: -np.inf for n in nodes}
 
-    ### Print variables to be given to output to communicate intermediate results
-    d_mu = collections.defaultdict(list)
-    covariance = collections.defaultdict(list)
-
     # average the path lengths from all the diffusion
     mean_path_lengths = tl.compute_mean_shortest_path(path_lengths)
-    ### Computes classes of nodes with same position with respect to all observers
-    #print('sorted_obs ', sorted_obs)
-    classes = tl.classes(mean_path_lengths, sorted_obs)
 
-    ### Iteration over all nodes per class
-    #   nodes from same class will be attributed the average of their likelihoods
-    #   likelihood
-    for c in classes:
+    # candidate nodes does not contain observers nodes by assumption
+    candidate_nodes = np.array(np.list(set(np.arange(nodes)) - set(sorted_obs)))
 
-        tmp_lkl = [] # Used to compute mean of likelihoods of same class
-        for s in c:
-            #print('""""""""""')
-            #print(path_lengths)
-            #print(path_lengths.transpose())
-            ### Covariance matrix
-            #print('S ', s)
-            #print('hahahahha')
-            #print('cov')
-            print(path_lengths.transpose().drop([str(sorted_obs[0])]).reset_index()[s])
-            #print(path_lengths.transpose().drop([str(sorted_obs[0])]).reset_index()[s].to_numpy())
-            #print(mean_path_lengths[str(sorted_obs[0])][s])
-            #print(path_lengths.transpose().drop([str(sorted_obs[0])]).reset_index()[s].to_numpy() - mean_path_lengths[str(sorted_obs[0])][s])
+    for s in candidate_nodes:
+            # covariance matrix
             cov_d_s = tl.cov_matrix(path_lengths, sorted_obs, s)
-            #print(cov_d_s)
-            #print(path_lengths.transpose().reset_index()[s])
-            #print(path_lengths.transpose().reset_index()[s].to_numpy())
-            #print('SHAPE ', cov_d_s.shape)
             ### Mean vector
             mu_s = tl.mu_vector_s(mean_path_lengths, s, sorted_obs)
-            #print('MU_S ')
-            #print(mu_s)
-            #print('SHAPE mean', mu_s.shape)
             ### Computes log-probability of the source being the real source
             likelihood, tmp = logLH_source_tree(mu_s, cov_d_s, sorted_obs, obs_time)
-            print('likelihood ', likelihood)
-            #print('tmp ', tmp)
-            tmp_lkl.append(likelihood)
+            loglikelihood[s] = likelihood
 
-            ## Save print values
-            d_mu[s] = tmp
-            covariance[s] = cov_d_s
-        ### If the class was not empty
-        if len(tmp_lkl)>0:
-            for s in c:
-                loglikelihood[s] = np.mean(tmp_lkl)
 
     ### Find the nodes with maximum loglikelihood and return the nodes
     # with maximum a posteriori likelihood
-
-    #print('posterior')
-
     ### Corrects a bias
     posterior = posterior_from_logLH(loglikelihood)
-    #print(posterior)
 
     max_lkl = max(posterior.values())
     source_candidates = list()
@@ -153,7 +112,6 @@ def logLH_source_tree(mu_s, cov_d, obs, obs_time):
     ### Computes the log of the gaussian probability of the observed time being possible
     exponent =  - (1/2 * (obs_d - mu_s).T.dot(np.linalg.inv(cov_d)).dot(obs_d -
             mu_s))
-    print('det cov ', np.linalg.det(cov_d))
     denom = math.sqrt((2*math.pi)**(len(obs_d)-1)*np.linalg.det(cov_d))
 
     return (exponent - np.log(denom))[0,0], obs_d - mu_s
