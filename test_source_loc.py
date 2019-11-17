@@ -26,16 +26,16 @@ def ptva_li_empirical(graph, obs_time, distribution) :
 
     return (s_est, ranked)
 
-def preprocess(observer, graph, distr, nb_diffusions):
+def preprocess(observers, graph, distr, nb_diffusions):
     graph_copy = graph.copy()
     path_lengths = pd.DataFrame()
-    for diff in range(30):
+    for diff in range(len(observers)):
         path_lengths_temp = pd.DataFrame()
         ### edge delay
         edges = graph_copy.edges()
         for (u, v) in edges:
             graph_copy[u][v]['weight'] = abs(distr.rvs())
-        for o in observer:
+        for o in observers:
             ### Computation of the shortest paths from every observer to all other nodes
             path_lengths_temp[str(o)] = pd.Series(nx.single_source_dijkstra_path_length(graph_copy, o))
         path_lengths = path_lengths.append(path_lengths_temp, sort = False)
