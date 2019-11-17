@@ -52,13 +52,13 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
     candidate_nodes = np.array(np.list(set(np.arange(nodes)) - set(sorted_obs)))
 
     for s in candidate_nodes:
-            # covariance matrix
-            cov_d_s = tl.cov_matrix(path_lengths, sorted_obs, s)
-            ### Mean vector
-            mu_s = tl.mu_vector_s(mean_path_lengths, s, sorted_obs)
-            ### Computes log-probability of the source being the real source
-            likelihood, tmp = logLH_source_tree(mu_s, cov_d_s, sorted_obs, obs_time)
-            loglikelihood[s] = likelihood
+        # covariance matrix
+        cov_d_s = tl.cov_matrix(path_lengths, sorted_obs, s)
+        ### Mean vector
+        mu_s = tl.mu_vector_s(mean_path_lengths, s, sorted_obs)
+        ### Computes log-probability of the source being the real source
+        likelihood, tmp = logLH_source_tree(mu_s, cov_d_s, sorted_obs, obs_time)
+        loglikelihood[s] = likelihood
 
 
     ### Find the nodes with maximum loglikelihood and return the nodes
