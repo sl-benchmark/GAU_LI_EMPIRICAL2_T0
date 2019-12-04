@@ -10,17 +10,6 @@ import operator
 
 # ---------------------------- MU VECTORS and COV MATRIX
 
-
-def verif_existant_path(edges, path):
-    """Verifies if the existing path exists in the list of edges.
-
-    edges : list of edges of the current graph
-    path : list of 2tuples representing the path
-
-    """
-    path_edges = zip(path[:-1], path[1:])
-    return all(any(p1==p2 for p1 in edges) for p2 in path_edges)
-
 '''
 Compute the mean shortest path of every diffusion
 PARAMETERS:
@@ -90,27 +79,3 @@ def filter_diffusion_data(infected, obs, max_obs=np.inf):
 
     else:
         return obs_time
-
-# ---------------------------- Equivalence classes
-
-def classes(path_length, sorted_obs):
-    """Computes the equivalenc classes among all the graph nodes with
-    respect to their distance to all observers in the graph
-
-    INPUT:
-        path_length (dict of dict) lengths of shortest paths from each node to all nodes
-        sorted_obs (list) list of observers sorted by infection time
-
-    """
-    ### Gets first infected observer and initializes the class dict
-    min_obs = sorted_obs[0]
-    vector_to_n = collections.defaultdict(list) # creates dictionnary that will create an empty list when a non existent key is accessed
-
-    ### Loops over all nodes reachables from the first infected node
-    for neighbor in path_length[str(min_obs)].keys():
-        ## In short computes key=distance to all observers and value=node
-        tuple_index = tuple(int((10**8)*(path_length[str(observer)][neighbor] - path_length[str(min_obs)][neighbor])) for observer in sorted_obs[1:])
-        vector_to_n[tuple_index].append(neighbor)
-
-    classes = vector_to_n.values()
-    return classes
