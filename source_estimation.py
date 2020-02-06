@@ -13,7 +13,7 @@ node.
 import math
 import networkx as nx
 import numpy as np
-import PTVA_LI_EMPIRICAL.source_est_tools as tl
+import GAU_LI_EMPIRICAL.source_est_tools as tl
 import operator
 import collections
 
