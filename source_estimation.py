@@ -66,14 +66,10 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
     ### Corrects a bias
     posterior = posterior_from_logLH(loglikelihood)
 
-    max_lkl = max(posterior.values())
-    source_candidates = list()
-    ### Finds nodes with maximum likelihood
-    for src, value in posterior.items():
-        if np.isclose(value, max_lkl, atol= 1e-08):
-            source_candidates.append(src)
+    scores = sorted(posterior.items(), key=operator.itemgetter(1), reverse=True)
+    source_candidate = list(scores.keys())[0]
 
-    return source_candidates, posterior
+    return source_candidate, scores
 
 #################################################### Helper methods for ml algo
 def posterior_from_logLH(loglikelihood):

@@ -17,18 +17,16 @@ def ptva_li_empirical(graph, obs_time, distribution) :
     sorted_obs = [x[0] for x in sorted_obs]
     path_lengths = preprocess(sorted_obs, graph, distribution, nb_diffusions)
     ### Run the estimation
-    s_est, likelihoods = se.ml_estimate(graph, obs_time, path_lengths)
+    s_est, scores = se.ml_estimate(graph, obs_time, path_lengths)
 
-    ranked = sorted(likelihoods.items(), key=operator.itemgetter(1), reverse=True)
-
-    return (s_est, ranked)
+    return (s_est, scores)
 
 
 
 def preprocess(observers, graph, distr, nb_diffusions):
     graph_copy = graph.copy()
     path_lengths = pd.DataFrame()
-    for diff in range(10 * len(observers)):
+    for diff in range(3 * len(observers)):
         path_lengths_temp = pd.DataFrame()
         ### edge delay
         edges = graph_copy.edges()
