@@ -40,6 +40,7 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
     sorted_obs = sorted(obs_time.items(), key=operator.itemgetter(1))
     sorted_obs = [x[0] for x in sorted_obs]
     o1 = min(obs_time, key=obs_time.get)
+    ref_obs = sorted_obs[0]
 
     ### Gets the nodes of the graph and initializes likelihood
     nodes = np.array(list(graph.nodes))
@@ -53,11 +54,11 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
 
     for s in candidate_nodes:
         # covariance matrix
-        cov_d_s = tl.cov_matrix(path_lengths, sorted_obs, s)
+        cov_d_s = tl.cov_matrix(path_lengths, sorted_obs, s, ref_obs)
         ### Mean vector
-        mu_s = tl.mu_vector_s(mean_path_lengths, s, sorted_obs)
+        mu_s = tl.mu_vector_s(mean_path_lengths, s, sorted_obs, ref_obs)
         ### Computes log-probability of the source being the real source
-        likelihood, tmp = logLH_source_tree(mu_s, cov_d_s, sorted_obs, obs_time)
+        likelihood, tmp = logLH_source_tree(mu_s, cov_d_s, sorted_obs, obs_time, ref_obs)
         loglikelihood[s] = likelihood
 
 
@@ -84,7 +85,7 @@ def posterior_from_logLH(loglikelihood):
             for key, value in loglikelihood.items())
 
 
-def logLH_source_tree(mu_s, cov_d, obs, obs_time):
+def logLH_source_tree(mu_s, cov_d, obs, obs_time, ref_obs):
     """ Returns loglikelihood of node 's' being the source.
     For that, the probability of the observed time is computed in a tree where
     the current candidate is the source/root of the tree.
@@ -103,7 +104,7 @@ def logLH_source_tree(mu_s, cov_d, obs, obs_time):
     ### Loops over all the observers (w/o first one (referential) and last one (computation constraint))
     #   Every time it computes the infection time with respect to the ref obs
     for l in range(1, len(obs)):
-        obs_d[l-1] = obs_time[obs[l]] - obs_time[obs[0]]
+        obs_d[l-1] = obs_time[obs[l]] - obs_time[ref_obs]
 
     ### Computes the log of the gaussian probability of the observed time being possible
     exponent =  - (1/2 * (obs_d - mu_s).T.dot(np.linalg.inv(cov_d)).dot(obs_d -

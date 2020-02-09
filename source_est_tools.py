@@ -22,7 +22,7 @@ def compute_mean_shortest_path(path_lengths):
     return path_lengths.groupby(['node']).mean().to_dict()
 
 
-def mu_vector_s(path_lengths, s, obs):
+def mu_vector_s(path_lengths, s, obs, ref_obs):
     """compute the mu vector for a candidate s
 
        obs is the ordered list of observers
@@ -31,15 +31,14 @@ def mu_vector_s(path_lengths, s, obs):
     for l in range(1, len(obs)):
         #the shortest path are contained in the bfs tree or at least have the
         #same length by definition of bfs tree
-        v.append(path_lengths[str(obs[l])][s] - path_lengths[str(obs[0])][s])
+        v.append(path_lengths[str(obs[l])][s] - path_lengths[str(ref_obs)][s])
     #Transform the list in a column array (needed for source estimation)
     mu_s = np.zeros((len(obs)-1, 1))
     mu_s[:, 0] = v
     return mu_s
 
 
-def cov_matrix(path_lengths, sorted_obs, s):
-    ref_obs = sorted_obs[0]
+def cov_matrix(path_lengths, sorted_obs, s, ref_obs):
     ref_time = path_lengths[str(ref_obs)].loc[s]
     ref_time = np.tile(ref_time, (len(sorted_obs)-1, 1))
 
