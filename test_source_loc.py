@@ -8,6 +8,7 @@ from termcolor import colored
 
 import GAU_LI_EMPIRICAL.source_estimation as se
 
+DIFFUSION = 150
 
 
 def gau_li_empirical(graph, obs_time, distribution) :
@@ -22,11 +23,10 @@ def gau_li_empirical(graph, obs_time, distribution) :
     return (s_est, scores)
 
 
-
 def preprocess(observers, graph, distr, nb_diffusions):
     graph_copy = graph.copy()
     path_lengths = pd.DataFrame()
-    for diff in range(3 * len(observers)):
+    for diff in range(DIFFUSION):
         path_lengths_temp = pd.DataFrame()
         ### edge delay
         edges = graph_copy.edges()
