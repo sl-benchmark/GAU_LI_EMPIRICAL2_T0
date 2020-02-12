@@ -11,6 +11,7 @@ node.
 
 """
 import math
+import random
 import networkx as nx
 import numpy as np
 import GAU_LI_EMPIRICAL.source_est_tools as tl
