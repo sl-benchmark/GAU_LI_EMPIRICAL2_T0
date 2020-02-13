@@ -40,8 +40,8 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
     ### Gets the sorted observers and the referential observer (closest one)
     sorted_obs = sorted(obs_time.items(), key=operator.itemgetter(1))
     sorted_obs = [x[0] for x in sorted_obs]
-    ref_obs = sorted_obs[0]
-    #ref_obs = random.choice(sorted_obs)
+    #ref_obs = sorted_obs[0]
+    ref_obs = random.choice(sorted_obs)
 
     ### Gets the nodes of the graph and initializes likelihood
     nodes = np.array(list(graph.nodes))
