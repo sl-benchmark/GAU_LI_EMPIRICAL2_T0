@@ -52,6 +52,7 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
 
     # candidate nodes does not contain observers nodes by assumption
     candidate_nodes = np.array(list(set(nodes) - set(sorted_obs)))
+    print('path_lengths', path_lengths)
 
     for s in candidate_nodes:
         # covariance matrix
@@ -61,6 +62,8 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
         ### Computes log-probability of the source being the real source
         likelihood, tmp = logLH_source_tree(mu_s, cov_d_s, sorted_obs, obs_time, ref_obs)
         loglikelihood[s] = likelihood
+        print('cov', cov_d_s)
+
 
 
     ### Find the nodes with maximum loglikelihood and return the nodes
