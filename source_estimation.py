@@ -57,12 +57,13 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
     for s in candidate_nodes:
         # covariance matrix
         cov_d_s = tl.cov_matrix(path_lengths, sorted_obs, s, ref_obs)
+        print('cov', cov_d_s)
         ### Mean vector
         mu_s = tl.mu_vector_s(mean_path_lengths, s, sorted_obs, ref_obs)
         ### Computes log-probability of the source being the real source
         likelihood, tmp = logLH_source_tree(mu_s, cov_d_s, sorted_obs, obs_time, ref_obs)
         loglikelihood[s] = likelihood
-        print('cov', cov_d_s)
+
 
 
 
