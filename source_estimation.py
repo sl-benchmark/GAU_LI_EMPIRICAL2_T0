@@ -52,12 +52,10 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
 
     # candidate nodes does not contain observers nodes by assumption
     candidate_nodes = np.array(list(set(nodes) - set(sorted_obs)))
-    print('path_lengths', path_lengths)
 
     for s in candidate_nodes:
         # covariance matrix
         cov_d_s = tl.cov_matrix(path_lengths, sorted_obs, s, ref_obs)
-        print('cov', cov_d_s)
         ### Mean vector
         mu_s = tl.mu_vector_s(mean_path_lengths, s, sorted_obs, ref_obs)
         ### Computes log-probability of the source being the real source
