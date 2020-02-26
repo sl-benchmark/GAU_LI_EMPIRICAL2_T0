@@ -43,6 +43,7 @@ def mu_vector_s(path_lengths, s, obs, ref_obs):
 
 def cov_matrix(path_lengths, sorted_obs, s, ref_obs):
     ref_time = path_lengths[str(ref_obs)].loc[s]
+    print('ref time size1', len(ref_time))
     ref_time = np.tile(ref_time, (len(sorted_obs)-1, 1))
     print('ref time', ref_time)
     print('ref time size', len(ref_time))
