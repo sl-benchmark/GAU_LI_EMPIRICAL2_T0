@@ -59,8 +59,8 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
         mu_s = tl.mu_vector_s(mean_path_lengths, s, sorted_obs, ref_obs)
         print('mu_s', mu_s)
         obs_subset = sorted_obs[:11]
-        mus_s = mu_s.sort()
-        mus_s = mus_s[:11]
+        mu_s = mu_s.sort()
+        mu_s = mu_s[:11]
         # covariance matrix
         cov_d_s = tl.cov_matrix(path_lengths, obs_subset, s, ref_obs)
         ### Computes log-probability of the source being the real source
