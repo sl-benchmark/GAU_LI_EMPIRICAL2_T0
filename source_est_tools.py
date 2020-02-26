@@ -47,8 +47,8 @@ def cov_matrix(path_lengths, sorted_obs, s, ref_obs):
     ref_time = np.tile(ref_time, (len(sorted_obs)-1, 1))
     print('ref time', ref_time)
     print('ref time size', len(ref_time))
-    return np.cov(path_lengths.transpose().drop([str(ref_obs)]).reset_index()[s].to_numpy() - ref_time, ddof = 0)
-
+    #return np.cov(path_lengths.transpose().drop([str(ref_obs)]).reset_index()[s].to_numpy() - ref_time, ddof = 0)
+    return np.cov(path_lengths.transpose()[[sorted_obs]].reset_index()[s].to_numpy() - ref_time, ddof = 0)
 
 
 # ---------------------------- Filtering diffusion data
