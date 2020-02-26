@@ -57,6 +57,7 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
     for s in candidate_nodes:
         ### Mean vector
         mu_s = tl.mu_vector_s(mean_path_lengths, s, sorted_obs, ref_obs)
+        print('mu_s', mu_s)
         obs_subset = sorted_obs[:11]
         mus_s = mu_s.sort()
         mus_s = mus_s[:11]
