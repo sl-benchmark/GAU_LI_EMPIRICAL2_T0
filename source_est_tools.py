@@ -34,6 +34,8 @@ def mu_vector_s(path_lengths, s, obs, ref_obs):
         v.append(path_lengths[str(obs[l])][s] - path_lengths[str(ref_obs)][s])
     #Transform the list in a column array (needed for source estimation)
     mu_s = np.zeros((len(obs)-1, 1))
+    v = v.sort()
+    v = v[:11]
     mu_s[:, 0] = v
     return mu_s
 
