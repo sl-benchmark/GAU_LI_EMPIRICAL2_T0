@@ -36,7 +36,7 @@ def mu_vector_s(path_lengths, s, obs, ref_obs):
     #mu_s = np.zeros((len(obs)-1, 1)
     mu_s = np.zeros((10, 1))
     v = sorted(v)
-    v = v[:11]
+    v = v[:10]
     mu_s[:, 0] = v
     return mu_s
 
