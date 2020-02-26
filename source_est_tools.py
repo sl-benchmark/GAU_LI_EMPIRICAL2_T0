@@ -50,7 +50,7 @@ def cov_matrix(path_lengths, sorted_obs, s, ref_obs):
     print('sorted obs', sorted_obs)
     print(path_lengths)
     #return np.cov(path_lengths.transpose().drop([str(ref_obs)]).reset_index()[s].to_numpy() - ref_time, ddof = 0)
-    return np.cov(path_lengths.transpose()[[str(s_obs) for s_obs in sorted_obs]].reset_index()[s].to_numpy() - ref_time, ddof = 0)
+    return np.cov(path_lengths.transpose()[str(s_obs) for s_obs in sorted_obs].reset_index()[s].to_numpy() - ref_time, ddof = 0)
 
 
 # ---------------------------- Filtering diffusion data
