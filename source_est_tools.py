@@ -33,10 +33,9 @@ def mu_vector_s(path_lengths, s, obs, ref_obs):
         #same length by definition of bfs tree
         v.append(path_lengths[str(obs[l])][s] - path_lengths[str(ref_obs)][s])
     #Transform the list in a column array (needed for source estimation)
-    mu_s = np.zeros((len(obs)-1, 1))
-    print('v1', v)
+    #mu_s = np.zeros((len(obs)-1, 1)
+    mu_s = np.zeros((10, 1)
     v = sorted(v)
-    print('v', v)
     v = v[:11]
     mu_s[:, 0] = v
     return mu_s
