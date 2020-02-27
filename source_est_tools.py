@@ -34,7 +34,7 @@ OUTPUT:
                 * Else: represents the K_0 closest observers to the candidate source
                         without the reference observer
 '''
-K_0 = 10
+K_0 = 100
 def mu_vector_s(path_lengths, s, obs_list, ref_obs):
     v = list()
     for l in range(1, len(obs_list)):
@@ -58,7 +58,7 @@ def mu_vector_s(path_lengths, s, obs_list, ref_obs):
 Compute the covariance matrix.
 PARAMETERS:
     - path_lengths: Pandas dataframe representing the path length of every diffusion
-    - obs_list: observer list without containing the reference observer 
+    - obs_list: observer list without containing the reference observer
     - s: the candidate source
     - ref_obs: the reference observer
 OUTPUT:
