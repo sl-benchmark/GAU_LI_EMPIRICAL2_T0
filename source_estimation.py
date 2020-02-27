@@ -60,6 +60,7 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
         obs_subset = sorted_obs[:10]
         # covariance matrix
         cov_d_s = tl.cov_matrix(path_lengths, obs_subset, s, ref_obs)
+        print('hahahahahahahahhahahaahahahahhahahhahahaahahahahahahahahhahahahahaahahhahaahhah')
         ### Computes log-probability of the source being the real source
         likelihood, tmp = logLH_source_tree(mu_s, cov_d_s, sorted_obs, obs_time, ref_obs)
         loglikelihood[s] = likelihood
