@@ -72,6 +72,7 @@ def cov_matrix(path_lengths, selected_obs, s, ref_obs):
     #return np.cov(path_lengths.transpose().drop([str(ref_obs)]).reset_index()[s].to_numpy() - ref_time, ddof = 0)
     obs_col = [str(s_obs) for s_obs in selected_obs]
     print('222222222', path_lengths[obs_col].transpose())
+    print('after', path_lengths[obs_col].transpose().reset_index()[s])
     return np.cov(path_lengths[obs_col].transpose().reset_index()[s].to_numpy() - ref_time, ddof = 0)
 
 
