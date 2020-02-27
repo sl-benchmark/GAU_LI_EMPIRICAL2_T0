@@ -58,17 +58,19 @@ def mu_vector_s(path_lengths, s, obs_list, ref_obs):
 Compute the covariance matrix.
 PARAMETERS:
     - path_lengths: Pandas dataframe representing the path length of every diffusion
-    - obs_list: observer list without containing the reference observer
+    - selected_obs: observer list without containing the reference observer
     - s: the candidate source
     - ref_obs: the reference observer
 OUTPUT:
     - 2D array representing covariance matrix
 '''
-def cov_matrix(path_lengths, obs_list, s, ref_obs):
+def cov_matrix(path_lengths, selected_obs, s, ref_obs):
     ref_time = path_lengths[str(ref_obs)].loc[s]
-    ref_time = np.tile(ref_time, (len(obs_list), 1))
+    ref_time = np.tile(ref_time, (len(selected_obs), 1))
+    print('111111111', path_lengths.transpose().drop([str(ref_obs)]).reset_index()[s])
+    print('222222222', path_lengths[obs_col].transpose().reset_index()[s])
     #return np.cov(path_lengths.transpose().drop([str(ref_obs)]).reset_index()[s].to_numpy() - ref_time, ddof = 0)
-    obs_col = [str(s_obs) for s_obs in obs_list]
+    obs_col = [str(s_obs) for s_obs in selected_obs]
     return np.cov(path_lengths[obs_col].transpose().reset_index()[s].to_numpy() - ref_time, ddof = 0)
 
 
