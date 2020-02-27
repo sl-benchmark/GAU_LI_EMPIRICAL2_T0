@@ -51,6 +51,7 @@ def cov_matrix(path_lengths, sorted_obs, s, ref_obs):
     print('ref time size', len(ref_time))
     print('sorted obs', sorted_obs)
     print(path_lengths)
+    print('path length 2', path_lengths.transpose().drop([str(ref_obs)]).reset_index()[s])
     #return np.cov(path_lengths.transpose().drop([str(ref_obs)]).reset_index()[s].to_numpy() - ref_time, ddof = 0)
     obs_col = [str(s_obs) for s_obs in sorted_obs]
     return np.cov(path_lengths.transpose()[obs_col].reset_index()[s].to_numpy() - ref_time, ddof = 0)
