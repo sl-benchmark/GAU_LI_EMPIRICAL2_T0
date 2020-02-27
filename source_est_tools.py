@@ -21,7 +21,7 @@ def compute_mean_shortest_path(path_lengths):
     path_lengths = path_lengths.rename({'index': 'node'}, axis = 1).set_index('node')
     return path_lengths.groupby(['node']).mean().to_dict()
 
-
+K_0 = 10
 def mu_vector_s(path_lengths, s, obs, ref_obs):
     """compute the mu vector for a candidate s
 
@@ -33,10 +33,12 @@ def mu_vector_s(path_lengths, s, obs, ref_obs):
         #same length by definition of bfs tree
         v.append(path_lengths[str(obs[l])][s] - path_lengths[str(ref_obs)][s])
     #Transform the list in a column array (needed for source estimation)
-    #mu_s = np.zeros((len(obs)-1, 1)
-    mu_s = np.zeros((10, 1))
-    v = sorted(v)
-    v = v[:10]
+    if len(obs)-1 <= K_0:
+        mu_s = np.zeros((len(obs)-1, 1)
+    else:
+        mu_s = np.zeros((K_0, 1))
+        v = sorted(v)
+        v = v[:K_0]
     mu_s[:, 0] = v
     return mu_s
 
@@ -50,7 +52,8 @@ def cov_matrix(path_lengths, sorted_obs, s, ref_obs):
     print('sorted obs', sorted_obs)
     print(path_lengths)
     #return np.cov(path_lengths.transpose().drop([str(ref_obs)]).reset_index()[s].to_numpy() - ref_time, ddof = 0)
-    return np.cov(path_lengths.transpose()[str(s_obs) for s_obs in sorted_obs].reset_index()[s].to_numpy() - ref_time, ddof = 0)
+    obs_col = [str(s_obs) for s_obs in sorted_obs]
+    return np.cov(path_lengths.transpose()[obs_col].reset_index()[s].to_numpy() - ref_time, ddof = 0)
 
 
 # ---------------------------- Filtering diffusion data
