@@ -43,6 +43,7 @@ def mu_vector_s(path_lengths, s, obs, ref_obs):
         v = sorted(v)
         v = v[:K_0]
     mu_s[:, 0] = v
+    print('obs', obs)
     return mu_s, obs
 
 
