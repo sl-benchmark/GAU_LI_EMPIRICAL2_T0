@@ -37,10 +37,12 @@ def mu_vector_s(path_lengths, s, obs, ref_obs):
         mu_s = np.zeros((len(obs)-1, 1))
     else:
         mu_s = np.zeros((K_0, 1))
+        indices = sorted(range(len(v)), key = lambda sub: v[sub])[-K_0:]
+        obs = obs[indices]
         v = sorted(v)
         v = v[:K_0]
     mu_s[:, 0] = v
-    return mu_s
+    return mu_s, obs
 
 
 def cov_matrix(path_lengths, sorted_obs, s, ref_obs):
