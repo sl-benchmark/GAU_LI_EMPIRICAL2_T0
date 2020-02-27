@@ -39,7 +39,8 @@ def mu_vector_s(path_lengths, s, obs, ref_obs):
     else:
         mu_s = np.zeros((K_0, 1))
         indices = sorted(range(len(v)), key = lambda sub: v[sub])[-K_0:]
-        obs = obs[indices][:K_0]
+        obs = obs[indices]
+        obs = obs[:K_0]
         v = sorted(v)
         v = v[:K_0]
     mu_s[:, 0] = v
