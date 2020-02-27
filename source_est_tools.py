@@ -36,6 +36,7 @@ def mu_vector_s(path_lengths, s, obs, ref_obs):
     if len(obs)-1 <= K_0:
         mu_s = np.zeros((len(obs)-1, 1))
         indices = np.arange(1, len(obs))
+        print('indices', indices)
         obs = obs[indices]
     else:
         mu_s = np.zeros((K_0, 1))
