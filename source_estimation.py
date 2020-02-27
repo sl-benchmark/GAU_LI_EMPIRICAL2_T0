@@ -106,6 +106,7 @@ def logLH_source_tree(mu_s, cov_d, obs, obs_time, ref_obs):
 
     ### Loops over all the observers (w/o first one (referential) and last one (computation constraint))
     #   Every time it computes the infection time with respect to the ref obs
+    print('len(obs)', len(obs))
     for l in range(1, len(obs)):
         obs_d[l-1] = obs_time[obs[l]] - obs_time[ref_obs]
 
