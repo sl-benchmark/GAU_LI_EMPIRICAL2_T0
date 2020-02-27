@@ -67,10 +67,10 @@ OUTPUT:
 def cov_matrix(path_lengths, selected_obs, s, ref_obs):
     ref_time = path_lengths[str(ref_obs)].loc[s]
     ref_time = np.tile(ref_time, (len(selected_obs), 1))
-    print('111111111', path_lengths.transpose().drop([str(ref_obs)]).reset_index()[s])
+    print('111111111', path_lengths.transpose().drop([str(ref_obs)]))
     #return np.cov(path_lengths.transpose().drop([str(ref_obs)]).reset_index()[s].to_numpy() - ref_time, ddof = 0)
     obs_col = [str(s_obs) for s_obs in selected_obs]
-    print('222222222', path_lengths[obs_col].transpose().reset_index()[s])
+    print('222222222', path_lengths[obs_col].transpose())
     return np.cov(path_lengths[obs_col].transpose().reset_index()[s].to_numpy() - ref_time, ddof = 0)
 
 
