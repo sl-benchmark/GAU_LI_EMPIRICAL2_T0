@@ -35,9 +35,7 @@ def mu_vector_s(path_lengths, s, obs, ref_obs):
     #Transform the list in a column array (needed for source estimation)
     if len(obs)-1 <= K_0:
         mu_s = np.zeros((len(obs)-1, 1))
-        indices = np.arange(1, len(obs))
-        print('obs', obs)
-        obs = obs[indices]
+        obs = obs[1:]
     else:
         mu_s = np.zeros((K_0, 1))
         indices = sorted(range(len(v)), key = lambda sub: v[sub])[-K_0:]
