@@ -36,13 +36,12 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
 
     """
 
-
-    ### Gets the sorted observers and the referential observer (closest one)
+    ### Gets the referential observer took at random
     sorted_obs = sorted(obs_time.items(), key=operator.itemgetter(1))
-    sorted_obs = [x[0] for x in sorted_obs]
-    random.shuffle(sorted_obs)
-    ref_obs = sorted_obs[0]
-    #ref_obs = random.choice(sorted_obs)
+    obs_list = [x[0] for x in sorted_obs]
+    random.shuffle(obs_list)
+    ref_obs = obs_list[0]
+    #ref_obs = random.choice(obs_list)
 
     ### Gets the nodes of the graph and initializes likelihood
     nodes = np.array(list(graph.nodes))
@@ -52,11 +51,11 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
     mean_path_lengths = tl.compute_mean_shortest_path(path_lengths)
 
     # candidate nodes does not contain observers nodes by assumption
-    candidate_nodes = np.array(list(set(nodes) - set(sorted_obs)))
+    candidate_nodes = np.array(list(set(nodes) - set(obs_list)))
 
     for s in candidate_nodes:
         ### Mean vector
-        mu_s, selected_obs = tl.mu_vector_s(mean_path_lengths, s, sorted_obs, ref_obs)
+        mu_s, selected_obs = tl.mu_vector_s(mean_path_lengths, s, obs_list, ref_obs)
         # covariance matrix
         cov_d_s = tl.cov_matrix(path_lengths, selected_obs, s, ref_obs)
         ### Computes log-probability of the source being the real source
@@ -97,7 +96,7 @@ def logLH_source_tree(mu_s, cov_d, obs, obs_time, ref_obs):
     - mu_s is the mean vector of Gaussian delays when s is the source
     - cov_d the covariance matrix for the tree
     - obs_time is a dictionary containing the observervations: observer --> time
-    - obs is the ordered list of observers, i.e. obs[0] is the reference
+    - obs is the list of observers without containing the reference observer
 
     """
     assert len(obs) > 1, obs

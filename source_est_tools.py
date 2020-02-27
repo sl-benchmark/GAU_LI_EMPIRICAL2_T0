@@ -21,36 +21,54 @@ def compute_mean_shortest_path(path_lengths):
     path_lengths = path_lengths.rename({'index': 'node'}, axis = 1).set_index('node')
     return path_lengths.groupby(['node']).mean().to_dict()
 
+'''
+Compute the mean vector for a candidate s.
+PARAMETERS:
+    - path_lengths: Pandas dataframe representing the path length of every diffusion
+    - s: the condidate source
+    - obs_list: observer list where the first observer in the list represents the reference observer
+    - ref_obs: the reference observer
+OUTPUT:
+    - mu_s: array representing mean vector
+    - obs_list: * If len(obs_list)-1 <= K_0: represents the observer list without the reference observer
+                * Else: represents the K_0 closest observers to the candidate source
+                        without the reference observer
+'''
 K_0 = 10
-def mu_vector_s(path_lengths, s, obs, ref_obs):
-    """compute the mu vector for a candidate s
-
-       obs is the ordered list of observers
-    """
+def mu_vector_s(path_lengths, s, obs_list, ref_obs):
     v = list()
-    for l in range(1, len(obs)):
+    for l in range(1, len(obs_list)):
         #the shortest path are contained in the bfs tree or at least have the
         #same length by definition of bfs tree
-        v.append(path_lengths[str(obs[l])][s] - path_lengths[str(ref_obs)][s])
+        v.append(path_lengths[str(obs_list[l])][s] - path_lengths[str(ref_obs)][s])
     #Transform the list in a column array (needed for source estimation)
-    if len(obs)-1 <= K_0:
-        mu_s = np.zeros((len(obs)-1, 1))
-        obs = obs[1:]
+    if len(obs_list)-1 <= K_0:
+        mu_s = np.zeros((len(obs_list)-1, 1))
+        obs_list = obs_list[1:]
     else:
         mu_s = np.zeros((K_0, 1))
         indices = np.array(sorted(range(len(v)), key = lambda sub: v[sub])[:K_0])
-        obs = np.array(obs)[indices+1]
+        obs_list = np.array(obs_list)[indices+1]
         v = sorted(v)
         v = v[:K_0]
     mu_s[:, 0] = v
-    return mu_s, obs
+    return mu_s, obs_list
 
-
-def cov_matrix(path_lengths, sorted_obs, s, ref_obs):
+'''
+Compute the covariance matrix.
+PARAMETERS:
+    - path_lengths: Pandas dataframe representing the path length of every diffusion
+    - obs_list: observer list without containing the reference observer 
+    - s: the candidate source
+    - ref_obs: the reference observer
+OUTPUT:
+    - 2D array representing covariance matrix
+'''
+def cov_matrix(path_lengths, obs_list, s, ref_obs):
     ref_time = path_lengths[str(ref_obs)].loc[s]
-    ref_time = np.tile(ref_time, (len(sorted_obs), 1))
+    ref_time = np.tile(ref_time, (len(obs_list), 1))
     #return np.cov(path_lengths.transpose().drop([str(ref_obs)]).reset_index()[s].to_numpy() - ref_time, ddof = 0)
-    obs_col = [str(s_obs) for s_obs in sorted_obs]
+    obs_col = [str(s_obs) for s_obs in obs_list]
     return np.cov(path_lengths[obs_col].transpose().reset_index()[s].to_numpy() - ref_time, ddof = 0)
 
 

@@ -10,7 +10,16 @@ import GAU_LI_EMPIRICAL.source_estimation as se
 
 DIFFUSION = 150
 
-
+'''
+Compute the source estimation.
+PARAMETERS:
+    - graph: netwrokx graph without any weight
+    - obs_time: disctionnary containing observer node --> infected time for the given node
+    - distribution: scipy.stats object representing the edge delay distribution
+OUTPUT:
+    - s_est: the unique source estimation
+    - scores: dictionnary containing node -> score of that node
+'''
 def gau_li_empirical(graph, obs_time, distribution) :
     nb_diffusions = int(np.sqrt(len(list(graph.nodes()))))
     ### Gets the sorted observers and the referential observer (closest one)
@@ -22,7 +31,17 @@ def gau_li_empirical(graph, obs_time, distribution) :
 
     return (s_est, scores)
 
-
+'''
+Make a certain number of diffusion in order approximate the path length between any node to a observer.
+PARAMETERS:
+    - observers: list of observers
+    - graph: unweighted netwrokx graph
+    - distr: scipy.stats object representing the edge delay distribution
+    - nb_diffusions: number of  diffusions that have to be made
+OUTPUT:
+    - path_lengths: Pandas dataframe representing the path length between a node (present in the rows
+    of the dataframe) and a observer node (present in the column of the dataframe) for every diffusion.
+'''
 def preprocess(observers, graph, distr, nb_diffusions):
     graph_copy = graph.copy()
     path_lengths = pd.DataFrame()
