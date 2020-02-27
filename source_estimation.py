@@ -108,8 +108,10 @@ def logLH_source_tree(mu_s, cov_d, obs, obs_time, ref_obs):
 
     ### Loops over all the observers (w/o first one (referential) and last one (computation constraint))
     #   Every time it computes the infection time with respect to the ref obs
-    for l in range(1, len(obs)):
-        obs_d[l-1] = obs_time[obs[l]] - obs_time[ref_obs]
+    #for l in range(1, len(obs)):
+    #    obs_d[l-1] = obs_time[obs[l]] - obs_time[ref_obs]
+    obs_d = obs_time[obs] - obs_time[ref_obs]
+    print('obs_d', obs_d)
 
     ### Computes the log of the gaussian probability of the observed time being possible
     exponent =  - (1/2 * (obs_d - mu_s).T.dot(np.linalg.inv(cov_d)).dot(obs_d -
