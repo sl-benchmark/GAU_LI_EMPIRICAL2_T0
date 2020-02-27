@@ -100,7 +100,7 @@ def logLH_source_tree(mu_s, cov_d, obs, obs_time, ref_obs):
     - obs is the ordered list of observers, i.e. obs[0] is the reference
 
     """
-    assert len(obs) > 1
+    assert len(obs) > 1, obs
 
     ### Creates the vector for the infection times with respect to the referential observer
     obs_d = np.zeros((len(obs), 1))
