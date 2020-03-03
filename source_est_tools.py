@@ -34,14 +34,13 @@ OUTPUT:
                 * Else: represents the K_0 closest observers to the candidate source
                         without the reference observer
 '''
-K_0 = 90
+K_0 = 500
 def mu_vector_s(path_lengths, s, obs_list, ref_obs):
     v = list()
     for l in range(1, len(obs_list)):
         #the shortest path are contained in the bfs tree or at least have the
         #same length by definition of bfs tree
         v.append(path_lengths[str(obs_list[l])][s] - path_lengths[str(ref_obs)][s])
-    print('len obs', len(obs_list))
     #Transform the list in a column array (needed for source estimation)
     if len(obs_list)-1 <= K_0:
         mu_s = np.zeros((len(obs_list)-1, 1))
@@ -49,14 +48,10 @@ def mu_vector_s(path_lengths, s, obs_list, ref_obs):
     else:
         mu_s = np.zeros((K_0, 1))
         indices = np.array(sorted(range(len(v)), key = lambda sub: v[sub])[:K_0])
-        print('indice', indices[0])
-        print('first one', path_lengths[str(np.array(obs_list)[indices[0]+1])][s] - path_lengths[str(ref_obs)][s])
         obs_list = np.array(obs_list)[indices+1]
         v = sorted(v)
         v = v[:K_0]
     mu_s[:, 0] = v
-    print('mu_s', mu_s)
-    print('obs_list', obs_list)
     return mu_s, obs_list
 
 '''
@@ -74,7 +69,6 @@ def cov_matrix(path_lengths, selected_obs, s, ref_obs):
     ref_time = np.tile(ref_time, (len(selected_obs), 1))
     #return np.cov(path_lengths.transpose().drop([str(ref_obs)]).reset_index()[s].to_numpy() - ref_time, ddof = 0)
     obs_col = [str(s_obs) for s_obs in selected_obs]
-    print(path_lengths[obs_col])
     return np.cov(path_lengths[obs_col].transpose().reset_index()[s].to_numpy() - ref_time, ddof = 0)
 
 
