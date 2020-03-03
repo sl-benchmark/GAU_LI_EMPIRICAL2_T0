@@ -41,6 +41,7 @@ def mu_vector_s(path_lengths, s, obs_list, ref_obs):
         #the shortest path are contained in the bfs tree or at least have the
         #same length by definition of bfs tree
         v.append(path_lengths[str(obs_list[l])][s] - path_lengths[str(ref_obs)][s])
+        print('len obs', len(obs_list))
     #Transform the list in a column array (needed for source estimation)
     if len(obs_list)-1 <= K_0:
         mu_s = np.zeros((len(obs_list)-1, 1))
@@ -52,6 +53,8 @@ def mu_vector_s(path_lengths, s, obs_list, ref_obs):
         v = sorted(v)
         v = v[:K_0]
     mu_s[:, 0] = v
+    print('mu_s', mu_s)
+    print('obs_list', obs_list)
     return mu_s, obs_list
 
 '''
