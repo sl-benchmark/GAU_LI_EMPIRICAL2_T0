@@ -50,7 +50,7 @@ def mu_vector_s(path_lengths, s, obs_list, ref_obs):
         mu_s = np.zeros((K_0, 1))
         indices = np.array(sorted(range(len(v)), key = lambda sub: v[sub])[:K_0])
         print('indice', indices[0])
-        print('first one', path_lengths[np.array(obs_list)[int(indices[0])+1]][s] - path_lengths[str(ref_obs)][s])
+        print('first one', path_lengths[str(np.array(obs_list)[indices[0]+1])][s] - path_lengths[str(ref_obs)][s])
         obs_list = np.array(obs_list)[indices+1]
         v = sorted(v)
         v = v[:K_0]
