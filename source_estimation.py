@@ -39,7 +39,7 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
     ### Gets the referential observer took at random
     sorted_obs = sorted(obs_time.items(), key=operator.itemgetter(1))
     obs_list = [x[0] for x in sorted_obs]
-    random.shuffle(obs_list)
+    #random.shuffle(obs_list)
     ref_obs = obs_list[0]
     #ref_obs = random.choice(obs_list)
 
