@@ -8,7 +8,7 @@ from termcolor import colored
 
 import GAU_LI_EMPIRICAL.source_estimation as se
 
-DIFFUSION = 50
+DIFFUSION = 10
 
 '''
 Compute the source estimation.
