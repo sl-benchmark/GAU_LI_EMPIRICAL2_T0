@@ -34,7 +34,7 @@ OUTPUT:
                 * Else: represents the K_0 closest observers to the candidate source
                         without the reference observer
 '''
-K_0 = 40
+K_0 = 30
 def mu_vector_s(path_lengths, s, obs_list, ref_obs):
     v = list()
     for l in range(1, len(obs_list)):
