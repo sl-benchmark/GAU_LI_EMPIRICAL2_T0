@@ -100,9 +100,3 @@ def filter_diffusion_data(infected, obs, max_obs=np.inf):
     else:
         return obs_time
 
-def w_vector(sorted_obs_time, mu, paths, s):
-    w_s = list()
-    for obs in sorted_obs_time:
-        w_s.append(obs[1] - (mu * len(paths[obs[0]][s])))
-    return np.array(w_s)
-
