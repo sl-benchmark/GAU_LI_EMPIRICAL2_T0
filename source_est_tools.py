@@ -27,7 +27,6 @@ PARAMETERS:
     - path_lengths: Pandas dataframe representing the path length of every diffusion
     - s: the condidate source
     - obs_list: observer list where the first observer in the list represents the reference observer
-    - ref_obs: the reference observer
 OUTPUT:
     - mu_s: array representing mean vector
     - obs_list: * If len(obs_list)-1 <= K_0: represents the observer list without the reference observer
@@ -35,12 +34,12 @@ OUTPUT:
                         without the reference observer
 '''
 K_0 = 100000
-def mu_vector_s(path_lengths, s, obs_list, ref_obs):
+def mu_vector_s(path_lengths, s, obs_list):
     v = list()
     for l in range(1, len(obs_list)):
         #the shortest path are contained in the bfs tree or at least have the
         #same length by definition of bfs tree
-        v.append(path_lengths[str(obs_list[l])][s] - path_lengths[str(ref_obs)][s])
+        v.append(path_lengths[str(obs_list[l])][s]
     #Transform the list in a column array (needed for source estimation)
     if len(obs_list)-1 <= K_0:
         mu_s = np.zeros((len(obs_list)-1, 1))
@@ -60,7 +59,6 @@ PARAMETERS:
     - path_lengths: Pandas dataframe representing the path length of every diffusion
     - selected_obs: observer list without containing the reference observer
     - s: the candidate source
-    - ref_obs: the reference observer
 OUTPUT:
     - 2D array representing covariance matrix
 '''
