@@ -37,11 +37,7 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
     """
 
     ### Gets the referential observer took at random
-    sorted_obs = sorted(obs_time.items(), key=operator.itemgetter(1))
-    obs_list = [x[0] for x in sorted_obs]
-    random.shuffle(obs_list)
-    ref_obs = obs_list[0]
-    #ref_obs = random.choice(obs_list)
+    obs_list = obs_time.values()
 
     ### Gets the nodes of the graph and initializes likelihood
     nodes = np.array(list(graph.nodes))
@@ -54,14 +50,25 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
     candidate_nodes = np.array(list(set(nodes) - set(obs_list)))
 
     for s in candidate_nodes:
-        ### Mean vector
-        mu_s, selected_obs = tl.mu_vector_s(mean_path_lengths, s, obs_list, ref_obs)
         # covariance matrix
-        cov_d_s = tl.cov_matrix(path_lengths, selected_obs, s, ref_obs)
-        ### Computes log-probability of the source being the real source
-        likelihood, tmp = logLH_source_tree(mu_s, cov_d_s, selected_obs, obs_time, ref_obs)
-        loglikelihood[s] = likelihood
+        cov_d_s = tl.cov_matrix(mean_path_lengths, obs_list, s)
+        cov_d_s_inv = np.linalg.inv(cov_d_s)
+        
+        ### vector -> difference between observation time and mean arrival time for observers
+        w_s = list()
+        for obs in obs_time:
+            w_s.append(obs -  mean_path_lengths[obs][s])
 
+        I = np.ones((len(w_s)))
+
+        ### MLE of initial time t0
+        t0_s = ((I.T @ cov_d_s_inv @ w_s) / (I.T @ cov_d_s_inv @ I))
+
+        ### Auxilary variable to make equation simpler to write
+        z_s = ((w_s - (t0_s*I)).T) @ cov_d_s_inv @ (w_s - (t0_s*I))
+
+        ### estimator for the source node
+        loglikelihood[s] = len(sorted_obs)*np.log(z_s) + np.log(np.linalg.det(cov_d_s))
 
 
 
@@ -86,31 +93,3 @@ def posterior_from_logLH(loglikelihood):
     bias = logsumexp(list(loglikelihood.values()))
     return dict((key, np.exp(value - bias))
             for key, value in loglikelihood.items())
-
-
-def logLH_source_tree(mu_s, cov_d, obs, obs_time, ref_obs):
-    """ Returns loglikelihood of node 's' being the source.
-    For that, the probability of the observed time is computed in a tree where
-    the current candidate is the source/root of the tree.
-
-    - mu_s is the mean vector of Gaussian delays when s is the source
-    - cov_d the covariance matrix for the tree
-    - obs_time is a dictionary containing the observervations: observer --> time
-    - obs is the list of observers without containing the reference observer
-
-    """
-    assert len(obs) > 1, obs
-
-    ### Creates the vector for the infection times with respect to the referential observer
-    obs_d = np.zeros((len(obs), 1))
-
-    ### Loops over all the observers (w/o first one (referential) and last one (computation constraint))
-    #   Every time it computes the infection time with respect to the ref obs
-    for l in range(0, len(obs)):
-        obs_d[l] = obs_time[obs[l]] - obs_time[ref_obs]
-
-    ### Computes the log of the gaussian probability of the observed time being possible
-    exponent =  - (1/2 * (obs_d - mu_s).T.dot(np.linalg.inv(cov_d)).dot(obs_d -
-            mu_s))
-    denom = math.sqrt((2*math.pi)**(len(obs_d)-1)*np.linalg.det(cov_d))
-    return (exponent - np.log(denom))[0,0], obs_d - mu_s
