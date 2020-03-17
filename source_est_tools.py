@@ -64,12 +64,9 @@ PARAMETERS:
 OUTPUT:
     - 2D array representing covariance matrix
 '''
-def cov_matrix(path_lengths, selected_obs, s, ref_obs):
-    ref_time = path_lengths[str(ref_obs)].loc[s]
-    ref_time = np.tile(ref_time, (len(selected_obs), 1))
-    #return np.cov(path_lengths.transpose().drop([str(ref_obs)]).reset_index()[s].to_numpy() - ref_time, ddof = 0)
+def cov_matrix(path_lengths, selected_obs, s):
     obs_col = [str(s_obs) for s_obs in selected_obs]
-    return np.cov(path_lengths[obs_col].transpose().reset_index()[s].to_numpy() - ref_time, ddof = 0)
+    return np.cov(path_lengths[obs_col].transpose().reset_index()[s].to_numpy(), ddof = 0)
 
 
 # ---------------------------- Filtering diffusion data
