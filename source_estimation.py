@@ -14,7 +14,7 @@ import math
 import random
 import networkx as nx
 import numpy as np
-import GAU_LI_EMPIRICAL.source_est_tools as tl
+import GAU_LI_EMPIRICAL_T0.source_est_tools as tl
 import operator
 import collections
 
@@ -37,7 +37,7 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
     """
 
     ### Gets the referential observer took at random
-    obs_list = obs_time.values()
+    obs_list = obs_time.keys()
 
     ### Gets the nodes of the graph and initializes likelihood
     nodes = np.array(list(graph.nodes))
@@ -51,13 +51,13 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
 
     for s in candidate_nodes:
         # covariance matrix
-        cov_d_s = tl.cov_matrix(mean_path_lengths, obs_list, s)
+        cov_d_s = tl.cov_matrix(path_lengths, obs_list, s)
         cov_d_s_inv = np.linalg.inv(cov_d_s)
         
         ### vector -> difference between observation time and mean arrival time for observers
         w_s = list()
-        for obs in obs_time:
-            w_s.append(obs -  mean_path_lengths[obs][s])
+        for obs in obs_time.keys():
+            w_s.append(obs_time[obs] -  mean_path_lengths[str(obs)][s])
 
         I = np.ones((len(w_s)))
 
@@ -68,16 +68,15 @@ def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
         z_s = ((w_s - (t0_s*I)).T) @ cov_d_s_inv @ (w_s - (t0_s*I))
 
         ### estimator for the source node
-        loglikelihood[s] = len(sorted_obs)*np.log(z_s) + np.log(np.linalg.det(cov_d_s))
+        loglikelihood[s] = -(len(obs_list)*np.log(z_s) + np.log(np.linalg.det(cov_d_s)))
 
 
 
     ### Find the nodes with maximum loglikelihood and return the nodes
     # with maximum a posteriori likelihood
     ### Corrects a bias
-    posterior = posterior_from_logLH(loglikelihood)
 
-    scores = sorted(posterior.items(), key=operator.itemgetter(1), reverse=True)
+    scores = sorted(loglikelihood.items(), key=operator.itemgetter(1), reverse=True)
     source_candidate = scores[0][0]
 
     return source_candidate, scores
