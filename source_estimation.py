@@ -14,7 +14,7 @@ import math
 import random
 import networkx as nx
 import numpy as np
-import GAU_LI_EMPIRICAL_T0.source_est_tools as tl
+import source_est_tools as tl
 import operator
 import collections
 

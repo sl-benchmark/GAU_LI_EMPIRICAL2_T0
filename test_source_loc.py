@@ -6,7 +6,7 @@ import operator
 from multiprocessing import Pool
 from termcolor import colored
 
-import GAU_LI_EMPIRICAL_T0.source_estimation as se
+import source_estimation as se
 
 DIFFUSION = 101
 
