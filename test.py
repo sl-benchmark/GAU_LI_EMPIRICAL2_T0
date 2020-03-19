@@ -1,3 +1,5 @@
+import os
+os.chdir('../')
 import networkx as nx
 import test_source_loc as ts
 import scipy.stats as st
@@ -33,3 +35,4 @@ for i in range(20):
     if res[i][0]==source:
         rank=i
 print("G(20,0.5), source rank ",rank)
+

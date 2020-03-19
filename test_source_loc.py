@@ -5,7 +5,10 @@ import sys
 import operator
 from multiprocessing import Pool
 from termcolor import colored
-
+import sys, inspect, os.path
+filename = inspect.getframeinfo(inspect.currentframe()).filename
+path     = os.path.dirname(os.path.abspath(filename))
+sys.path.insert(1, path)
 import source_estimation as se
 
 DIFFUSION = 101

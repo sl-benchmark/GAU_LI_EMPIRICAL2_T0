@@ -10,6 +10,10 @@ likelihood is a dictionary containing the a posteriori likelihood of every
 node.
 
 """
+import os, sys
+scriptPath = os.path.realpath(os.path.dirname(sys.argv[0]))
+os.chdir(scriptPath)
+
 import math
 import random
 import networkx as nx
