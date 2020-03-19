@@ -11,19 +11,21 @@ node.
 
 """
 import os, sys
-scriptPath = os.path.realpath(os.path.dirname(sys.argv[0]))
-os.chdir(scriptPath)
-
 import math
 import random
 import networkx as nx
 import numpy as np
-import source_est_tools as tl
 import operator
 import collections
 
 import scipy.stats as st
 from scipy.misc import logsumexp
+
+try:
+    from . import source_est_tools as tl
+except (SystemError, ImportError): #ImportError
+    import source_est_tools as tl
+
 
 def ml_estimate(graph, obs_time, path_lengths, max_dist=np.inf):
 
