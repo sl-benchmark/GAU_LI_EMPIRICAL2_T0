@@ -14,9 +14,6 @@ try:
 except (SystemError, ImportError): #ImportError
     import source_estimation as se
 
-
-DIFFUSION = 101
-
 '''
 Compute the source estimation.
 PARAMETERS:
@@ -28,7 +25,7 @@ OUTPUT:
     - scores: dictionnary containing node -> score of that node
 '''
 def gau_li_empirical_t0(graph, obs_time, distribution) :
-    nb_diffusions = int(np.sqrt(len(list(graph.nodes()))))
+    nb_diffusions = 5*len(obs_time.values())
     ### Gets the sorted observers and the referential observer (closest one)
     sorted_obs = sorted(obs_time.items(), key=operator.itemgetter(1))
     sorted_obs = [x[0] for x in sorted_obs]
@@ -51,8 +48,7 @@ OUTPUT:
 '''
 def preprocess(observers, graph, distr, nb_diffusions):
     graph_copy = graph.copy()
-    path_lengths = pd.DataFrame()
-    for diff in range(DIFFUSION):
+    for diff in range(nb_diffusions):
         path_lengths_temp = pd.DataFrame()
         ### edge delay
         edges = graph_copy.edges()
