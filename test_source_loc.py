@@ -48,6 +48,7 @@ OUTPUT:
 '''
 def preprocess(observers, graph, distr, nb_diffusions):
     graph_copy = graph.copy()
+    path_lengths = pd.DataFrame()
     for diff in range(nb_diffusions):
         path_lengths_temp = pd.DataFrame()
         ### edge delay
