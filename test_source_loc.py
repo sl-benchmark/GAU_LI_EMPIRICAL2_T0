@@ -3,8 +3,8 @@ import numpy as np
 import pandas as pd
 import sys
 import operator
-from multiprocessing import Pool
-from termcolor import colored
+#from multiprocessing import Pool
+#from termcolor import colored
 #import sys, inspect, os.path
 #filename = inspect.getframeinfo(inspect.currentframe()).filename
 #path     = os.path.dirname(os.path.abspath(filename))
