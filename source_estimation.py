@@ -19,7 +19,11 @@ import operator
 import collections
 
 import scipy.stats as st
-from scipy.misc import logsumexp
+try:
+    from scipy.misc import logsumexp
+except (SystemError, ImportError): #ImportError
+    from scipy.special import logsumexp
+
 
 try:
     from . import source_est_tools as tl
